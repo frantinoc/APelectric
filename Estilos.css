@@ -1,0 +1,27 @@
+ body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;margin:20px;background:#f8fafc;color:#0f172a}
+    .card{background:white;border-radius:10px;padding:18px;box-shadow:0 6px 20px rgba(2,6,23,0.06);max-width:980px;margin:0 auto}
+    h1{font-size:20px;margin:0 0 8px}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    input[type="text"]{padding:10px;border-radius:8px;border:1px solid #e2e8f0;min-width:220px}
+    button{background:#0ea5e9;color:white;padding:10px 14px;border-radius:8px;border:0;cursor:pointer}
+    button.secondary{background:#e2e8f0;color:#0f172a}
+    button:disabled{opacity:0.6;cursor:not-allowed}
+    table{width:100%;border-collapse:collapse;margin-top:14px}
+    th,td{padding:8px;border-bottom:1px solid #e6eef8;text-align:left;vertical-align:top}
+    th{background:#f1f5f9}
+    .small{font-size:13px;color:#475569}
+    .hint{font-size:13px;color:#64748b;margin-top:10px}
+    .notice{padding:10px;background:#fffbeb;border-left:4px solid #f59e0b;border-radius:6px;margin:10px 0}
+
+
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; max-width:900px; margin:28px auto; padding:0 18px; color:#111; }
+    h1 { font-size:1.4rem; margin-bottom:6px; }
+    label { display:block; margin-top:10px; font-weight:600; }
+    input, select, button, textarea { font-size:1rem; padding:8px; margin-top:6px; width:100%; box-sizing:border-box; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .controls { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+    button { cursor:pointer; border:none; background:#0b79d0; color:white; padding:10px 12px; border-radius:6px; }
+    button.secondary { background:#444; }
+    .result { margin-top:16px; padding:12px; border-radius:8px; background:#f6f8fa; }
+    small { color:#555; }
+    footer { margin-top:28px; color:#666; font-size:0.9rem; }

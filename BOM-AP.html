@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Buscar dato en datos.xls (local)</title>
+
+  <!-- SheetJS para leer Excel en el navegador -->
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<link rel="stylesheet" href="Estilos.css">
+
+</head>
+<body>
+  <div>
+    <img src="Logo.jpg" alt="Logo" width="350" height="145">
+
+  </div>
+  <div class="card">
+
+    <h1>BUSQUEDA DE ALUMBRADO PUBLICO Y BOM → Google Earth / Maps <code></code></h1>
+   
+
+    <div class="row" style="margin-top:10px;margin-bottom:8px">
+      <input id="searchInput" type="text" placeholder="CT O FUN A BUSCAR " />
+      <button id="searchBtn" onclick="buscar()">Buscar</button>
+
+    </div>
+
+    <div id="status" class="small"></div>
+    <div id="results" style="margin-top:12px"></div>
+
+  </div>
+  <!--<h1>BUSQUEDA DE ALUMBRADO PUBLICO Y BOM / Google Maps</h1>
+  <p>Introduce coordenadas UTM (WGS84). y abrir directamente en Google Maps / Google Earth Web.</p>-->
+  <for="zone">
+  <option id="zone" type="16" min="1" max="60" value="16" ></option>
+  <!--<for="hem">Hemisferio</label>-->
+  <option id="hem" ></option>
+    <option value="Norte"></option>
+   <!--</select> -->
+
+  <div class="row">
+    <div>
+      <label for="easting">Meridiano del Este</label>
+    <input id="easting" disabled type="number" value="500000" />
+    </div>
+    <div>
+      <label for="northing">Meridiano del Norte</label>
+     <input id="northing"disabled  type="number" value="4640000" />
+    </div>
+  </div>
+
+   <div class="controls">
+    <button id="mapsBtn" class="primary">Abrir en Google Maps</button>
+    <button id="earthWebBtn" class="primary">Abrir en Google Eaarth (Web)</button>
+   <button id="kmlBtn" class="primary">Generar / Descargar KML</button>
+ </div>
+
+  <div class="result" id="result">
+    <div><strong>Lat:</strong> <span id="lat">—</span></div>
+    <div><strong>Lon:</strong> <span id="lon">—</span></div>
+    <div><small id="msg"></small></div>
+  </div>
+
+  <footer>
+    Nota: la conversión usa WGS84 y la proyección UTM estándar (factor k0 = 0.9996). 
+  </footer>
+  <script src="Consulta.js"></script>
+<script src="ejecutable.js"></script>
+
+ 
+</body>
+</html>
+

@@ -1,0 +1,136 @@
+async function openFileWithHandle(){
+    if (!('showOpenFilePicker' in window)) {
+      // no soportado -> fallback
+      filePickerFallback.click();
+      return;
+    }
+    try {
+      const [handle] = await window.showOpenFilePicker({
+        types: [{
+          description: 'Archivos Excel',
+          accept: {'application/vnd.ms-excel': ['.xls'], 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']}
+        }],
+        multiple: false,
+        // No podemos fijar la ruta C:\... por seguridad; el usuario debe seleccionar el archivo.
+      });
+      const file = await handle.getFile();
+      lastFileName = file.name;
+      await readWorkbookFromFile(file);
+    } catch (err) {
+      // Si el usuario cancela o da error, no pasa nada
+      console.error(err);
+      setStatus('Selección de archivo cancelada o fallida. Usa el input fallback.', true);
+    }
+  }
+
+  // Fallback: input file
+  filePickerFallback.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    lastFileName = file.name;
+    await readWorkbookFromFile(file);
+    // reset input para permitir seleccionar el mismo archivo otra vez si hace falta
+    filePickerFallback.value = '';
+  });
+
+  openBtn.addEventListener('click', openFileWithHandle);
+
+  async function readWorkbookFromFile(file){
+    setStatus('Leyendo archivo: ' + file.name + ' ...');
+    try{
+      const arrayBuffer = await file.arrayBuffer();
+      const wb = XLSX.read(arrayBuffer, {type: 'array'});
+      workbookData = {};
+      wb.SheetNames.forEach(name => {
+        const ws = wb.Sheets[name];
+        // obtener como array de arrays (filas)
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+        workbookData[name] = rows;
+      });
+      setStatus(`Archivo cargado: ${file.name}. Hojas: ${Object.keys(workbookData).length}. Listo para buscar.`);
+      searchBtn.disabled = false;
+    } catch (err) {
+      console.error(err);
+      setStatus('Error leyendo el archivo. Asegúrate de que sea un .xls/.xlsx válido.', true);
+      searchBtn.disabled = true;
+      workbookData = null;
+    }
+  }
+
+  // Búsqueda al hacer click
+  searchBtn.addEventListener('click', () => {
+    results.innerHTML = '';
+    if (!workbookData) { setStatus('Primero abre y selecciona el archivo Excel.'); return; }
+    const q = String(searchInput.value || '').trim();
+    if (q === '') { setStatus('Ingresa el dato a buscar.'); return; }
+    setStatus(`Buscando "${q}" (comparación exacta, case-insensitive) ...`);
+    const qLower = q.toLowerCase();
+    const matches = []; // {sheet,rowIndex,colIndex,foundValue,right:[v1,v2,v3]}
+
+    for (const sheetName of Object.keys(workbookData)) {
+      const rows = workbookData[sheetName];
+      for (let i = 0; i < rows.length; i++){
+        const row = rows[i] || [];
+        for (let j = 0; j < row.length; j++){
+          const cellVal = (row[j] !== undefined && row[j] !== null) ? String(row[j]).trim() : "";
+          if (cellVal.toLowerCase() === qLower) {
+            const right = [
+              (row[j+1] !== undefined) ? String(row[j+1]) : "",
+              (row[j+2] !== undefined) ? String(row[j+2]) : "",
+              (row[j+3] !== undefined) ? String(row[j+3]) : ""
+            ];
+            matches.push({sheet: sheetName, rowIndex: i, colIndex: j, foundValue: cellVal, right});
+          }
+        }
+      }
+    }
+
+    if (matches.length === 0) {
+      setStatus(`No se encontró "${q}" en el archivo ${lastFileName || ''}.`);
+      results.innerHTML = '';
+      return;
+    }
+
+    setStatus(`Se encontraron ${matches.length} coincidencia(s).`);
+    // Construir tabla de resultados
+    let html = `<table><thead><tr>
+                  <th>Valor encontrado</th>
+                  <th>Col derecha </th><th>Col derecha</th>
+                </tr></thead><tbody>`;
+    for (const m of matches){
+     var tino=m.right[0];
+    var tino1=m.right[1];
+
+    eastingEl.value = tino;
+    northingEl.value = tino1;
+ 
+ 
+           html += `<tr>
+                 <td>${escapeHtml(m.foundValue)}</td>
+                 <td>${escapeHtml(m.right[0])}</td>
+                 <td>${escapeHtml(m.right[1])}</td>
+               </tr>`;
+    
+    }
+    html += `</tbody></table>`;
+    results.innerHTML = html;
+  });
+
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    results.innerHTML = '';
+    setStatus('');
+  });
+
+  // Habilitar Enter para buscar
+  searchInput.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter' && !searchBtn.disabled) searchBtn.click();
+  });
+
+  // Al cargar la página, si la File System Access API está disponible informamos al usuario
+  if ('showOpenFilePicker' in window) {
+    setStatus('Navegador con File System Access API disponible. Usa "Abrir archivo" para seleccionar directamente el .xls/.xlsx.');
+  } else {
+    setStatus('Tu navegador NO soporta la API de acceso directo a archivos. Se abrirá un selector de archivo tradicional si es necesario.');
+  }
+})();
