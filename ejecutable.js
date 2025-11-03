@@ -92,11 +92,11 @@
 
   // UI helpers
 
-
+// aca pasan a 10 decimales
   function mostrarResultado(lat, lon) {
-    latEl.textContent = lat.toFixed(8);
-    lonEl.textContent = lon.toFixed(8);
-    msgEl.textContent = `Coordenadas en WGS84 (grados decimales). Lat/Lon mostrados con 8 decimales.`;
+    latEl.textContent = lat.toFixed(10);
+    lonEl.textContent = lon.toFixed(10);
+    msgEl.textContent = `Coordenadas en WGS84 (grados decimales). Lat/Lon mostrados con 10 decimales.`;
   }
 
   function validarYConvertir() {
