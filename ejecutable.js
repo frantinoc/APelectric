@@ -142,7 +142,7 @@
     // Google Earth Web supports a share-like URL using @lat,lon,alt but may require slightly different format.
     // We'll attempt to open Earth with a lat/lon view. Note: Earth Web may not support a guaranteed pin via URL,
     // but this will open the approximate location in Earth Web.
-    const lat = p.lat.toFixed(8), lon = p.lon.toFixed(8);
+    const lat = p.lat.toFixed(10), lon = p.lon.toFixed(10);
     // altitude chosen modest: 1000m
     const url = `https://earth.google.com/web/@${lat},${lon},1000a,1000d,35y,0h,0t,0r`;
     window.open(url, '_blank');
@@ -152,7 +152,7 @@
     const p = validarYConvertir();
     if (!p) return;
     const name = `UTM_${zoneEl.value}${hemEl.value}_${Date.now()}`;
-    const description = `Conversión UTM zona ${zoneEl.value}${hemEl.value} → lat:${p.lat.toFixed(8)} lon:${p.lon.toFixed(8)}`;
+    const description = `Conversión UTM zona ${zoneEl.value}${hemEl.value} → lat:${p.lat.toFixed(10)} lon:${p.lon.toFixed(10)}`;
     const kml = `<?xml version="1.0" encoding="UTF-8"?>\n` +
 `<kml xmlns="http://www.opengis.net/kml/2.2">\n` +
 `  <Document>\n` +
@@ -161,7 +161,7 @@
 `      <name>${escapeXml(name)}</name>\n` +
 `      <description>${escapeXml(description)}</description>\n` +
 `      <Point>\n` +
-`        <coordinates>${p.lon.toFixed(8)},${p.lat.toFixed(8)},0</coordinates>\n` +
+`        <coordinates>${p.lon.toFixed(10)},${p.lat.toFixed(10)},0</coordinates>\n` +
 `      </Point>\n` +
 `    </Placemark>\n` +
 `  </Document>\n` +
